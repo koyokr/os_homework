@@ -30,7 +30,7 @@ typedef struct {
     Word *end;
 } Range;
 
-pthread_mutex_t MUTEX_LOCK; // Critical-section 객체
+pthread_mutex_t MUTEX_LOCK; // pthread_mutex 객체
 ListRoot HT[TABLE_SIZE]; // 해시 테이블
 
 void unix_error(char const *s)
@@ -131,9 +131,9 @@ void *work(void *param)
     Range *r = param;
     for (Word *p = r->beg; p != r->end; p++) {
         element e = { p->bytes };
-        pthread_mutex_lock(&MUTEX_LOCK); // Critical-section 시작
+        pthread_mutex_lock(&MUTEX_LOCK);
         hash_chain_add(e);
-        pthread_mutex_unlock(&MUTEX_LOCK); // Critical-section 종료
+        pthread_mutex_unlock(&MUTEX_LOCK);
     }
     return NULL;
 }
@@ -161,7 +161,7 @@ int main()
         pthread_join(ts[i], NULL); // 스레드 핸들 제거
     hash_chain_count_print();
 
-    pause();
+    pause(); // for "cat /proc/[PID]/status"
 
     pthread_mutex_destroy(&MUTEX_LOCK); // pthread_mutex 객체 제거
     free_words(words); // 단어 목록 메모리 회수
