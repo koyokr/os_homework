@@ -19,7 +19,7 @@ int main()
     int len = getpagesize();
 
     /* CreateFile */
-    int fd = shm_open("temp.txt", O_RDONLY, 0);
+    int fd = shm_open(name, O_RDONLY, 0);
     if (fd == -1)
         unix_error("open");
 
@@ -29,7 +29,9 @@ int main()
         unix_error("mmap");
 
     /* write to shared memory */
-    printf("Read message %s", addr);
+    printf("Read message %s\n", addr);
+
+    pause();
 
     munmap((void *)addr, len);
     shm_unlink(name);

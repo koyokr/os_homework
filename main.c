@@ -1,6 +1,7 @@
+#include <pthread.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <pthread.h>
+#include <unistd.h>
 
 #define TABLE_SIZE (199)
 #define WORD_MAXSIZE (16)
@@ -158,8 +159,9 @@ int main()
     }
     for (int i = 0; i < N_THREAD; i++)
         pthread_join(ts[i], NULL); // 스레드 핸들 제거
-
     hash_chain_count_print();
+
+    pause();
 
     pthread_mutex_destroy(&MUTEX_LOCK); // pthread_mutex 객체 제거
     free_words(words); // 단어 목록 메모리 회수

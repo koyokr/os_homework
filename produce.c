@@ -35,7 +35,8 @@ int main()
     sprintf(addr, "Shared memory message");
     msync(addr, len, MS_SYNC);
 
+    pause();
+
     munmap(addr, len);
-    shm_unlink(name);
     return 0;
 }
